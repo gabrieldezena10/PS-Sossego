@@ -1,5 +1,6 @@
 export const defaultTheme = {
   colors: {
+    "base-black": "#000000",
     "base-white": "#FFFFFF",
     "base-background": "#FAFAFA",
     "base-card": "#F3F2F2",
@@ -35,7 +36,6 @@ export const defaultTheme = {
     "components-button-s": "0.75rem",
   },
   fonts: {
-    regular: "'Roboto'",
-    title: "'Baloo 2'",
+    regular: "'Poppins'",
   },
 };
