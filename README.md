@@ -12,12 +12,12 @@ O teste deverá ser entregue com o link para o repositório do Github
 
 ## Layout Final
 <div float="left">
-  <img width="510" src="./src/assets/page1-userId.png" alt="Página inicial"/>
-  <img width="490" src="./src/assets/page2-addressInfo.png" alt="Página inicial"/>
+  <img width="410" src="./src/assets/page1-userId.png" alt="Página inicial"/>
+  <img width="390" src="./src/assets/page2-addressInfo.png" alt="Página inicial"/>
 </div>
 <div float="left">
-  <img width="600" src="./src/assets/page3-userPersonalInfo.png" alt="Página inicial"/>
-  <img width="400" src="./src/assets/page4-createdUser.png" alt="Página inicial"/>
+  <img width="500" src="./src/assets/page3-userPersonalInfo.png" alt="Página inicial"/>
+  <img width="300" src="./src/assets/page4-createdUser.png" alt="Página inicial"/>
 </div>
 
 ## Instalação
