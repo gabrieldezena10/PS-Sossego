@@ -1,9 +1,15 @@
+import { ThemeProvider } from "styled-components"
+import UserForm from "./pages/UserForm"
+import { GlobalStyle } from "./styles/global"
+import { defaultTheme } from "./styles/themes/default"
+
 function App() {
 
   return (
-    <div>
-      <h1>Teste</h1>
-    </div>
+    <ThemeProvider theme={defaultTheme}>
+        <GlobalStyle />
+        <UserForm />
+    </ThemeProvider>
   )
 }
 
