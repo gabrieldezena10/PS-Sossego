@@ -1,39 +1,22 @@
 import { FileText, House, UserCircle } from "phosphor-react";
 import React, { useContext, useRef } from "react";
 import { multiStepContext } from "../../context/StepContext";
-import { z } from 'zod'
-import { Container, HeaderContent, MainContainer, HeaderSteps, FormContainer, InputStyle, ButtonStyle, InputContainer, ImagesContent } from "./styles";
+import { Container, HeaderContent, MainContainer, HeaderSteps, FormContainer, InputStyle, ButtonStyle, InputContainer, ImagesContent, ButtonContainer } from "./styles";
+import { useForm } from "react-hook-form";
+import InputMask from "react-input-mask";
 
 
 function FormRegisterDetail() {
 
-  const { setCurrFormStep, userData, setUserData } = useContext(multiStepContext);
+  const { setCurrFormStep, setFormValues } = useContext(multiStepContext);
+  const { handleSubmit, formState: { errors }, register, watch } = useForm({ mode: "all" });
 
-  const nomeRef = useRef();
-  const emailRef = useRef()
+  const nomeRef = useRef()
 
-  const dataRef = () => {
-    setUserData(
-      {
-        ...userData,
-        nome: nomeRef.current.value,
-        email: emailRef.current.value,
-      }
-    );
+  const dataRef = (values) => {
+    setFormValues(values)
     setCurrFormStep(1);
   }
-
-  // const validateSchema = z
-  //   .object({
-  //     name: z.string().min(2, "Insira um nome com pelo menos 2 caracteres"),
-  //     email: z.string().email(),
-  //     password: z.string().min(6, "Insira uma senha com pelo menos 6 dígitos"),
-  //     confirmPassword: z.string().min(6, "A confirmação da senha deve possuir a mesma quantidade de caracteres que o campo da senha"),
-  //   })
-  //   .refine((data) => data.password === data.confirmPassword, {
-  //     message: "Confirmação de senha não confere",
-  //     path: ["confirmpassword"]
-  //   });
 
   return(
     <Container>
@@ -61,15 +44,22 @@ function FormRegisterDetail() {
             </ImagesContent>
           </HeaderSteps>
         </HeaderContent>
-        <FormContainer>
+        <FormContainer onSubmit={handleSubmit(dataRef)}>
           <InputContainer>
             <div>
               <label htmlFor="name">Nome</label>
-              <InputStyle id="name" 
+              <InputStyle 
+                id="name" 
                 name="name" 
                 type='text'
-                ref={nomeRef}
+                required
+                {...register("name", {
+                  required: true,
+                })}
               />
+              {errors.name && (
+                <p style={{ color: "red"}}>Digite seu nome</p>
+              )}
             </div>
           </InputContainer>
           <InputContainer>
@@ -79,7 +69,18 @@ function FormRegisterDetail() {
                 name="password"
                 id="pass" 
                 type='password'
+                required
+                {...register("password", {
+                  required: true,
+                  minLength: {
+                    value: 6,
+                    message: "Senha precisa ter no mínimo 6 dígitos"
+                  }
+                })}
               />
+              {errors.password && (
+                <p style={{ color: "red"}}>{errors.password.message}</p>
+              )}
             </div>
             <div>
               <label htmlFor="pass-confirm">Confirmar Senha</label>
@@ -87,32 +88,65 @@ function FormRegisterDetail() {
                 id="pass-confirm" 
                 name="confirmPassword"
                 type='password'
+                required
+                {...register("confirmPassword", {
+                  required: true,
+                  validate: (value) => {
+                    if(watch('password') != value) return "Senhas incompatíveis"
+                  }
+                })}
               />
+                {errors.confirmPassword && (
+                <p style={{ color: "red"}}>{errors.confirmPassword.message}</p>
+              )}
             </div>
           </InputContainer>
           <InputContainer>
             <div>
               <label htmlFor="emailId">Email</label>
               <InputStyle 
-              id="emailId" 
-              type='email'
-              ref={emailRef}
+              id="emailId"
+              name="email"
+              type="email"
+              required
+              {...register("email", {
+                required: true,
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Email inválido"
+                }
+              })}
               />
+              {errors.email && (
+                <p style={{ color: "red"}}>{errors.email.message}</p>
+              )}
             </div>
             <div>
               <label htmlFor="birthday">Data de Nascimento</label>
-              <InputStyle 
-              id="birthday"
-              name="birthDate"
-              mask="99/99/9999"
+              <InputMask 
+                mask="99/99/9999"
+                className="inputStyle"
+                id="birthday"
+                name="birthDate"
+                type="text"
+                placeholder=""
+                {...register("birthDate", {
+                  required: "Data é necessária"
+                })}
               />
+              {errors.birthDate && (
+                <p style={{ color: "red"}}>{errors.birthDate.message}</p>
+              )}
             </div>
           </InputContainer>
+          <ButtonContainer>
+            <ButtonStyle 
+              type='submit'
+                >Próximo passo
+            </ButtonStyle>
+          </ButtonContainer>
+
         </FormContainer>
-        <ButtonStyle 
-          onClick={ () => dataRef() } 
-          >Próximo passo
-        </ButtonStyle>
       </MainContainer>
     </Container>
   )

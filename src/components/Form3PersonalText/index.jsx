@@ -2,11 +2,15 @@ import { FileText, House, UserCircle } from "phosphor-react";
 import React, { useContext } from "react";
 import { multiStepContext } from "../../context/StepContext";
 import { ButtonContainer, ButtonStyle, Container, FormContainer, HeaderContent, HeaderSteps, ImagesContent, InputContainer, MainContainer } from './styles'
+import { useForm } from "react-hook-form";
 
 function FormPersonalText() {
-  const { setCurrFormStep, submitData } = useContext(multiStepContext);
 
-  const submitForm = () => {
+  const { setCurrFormStep, submitData, setFormValues } = useContext(multiStepContext);
+  const { handleSubmit, formState: { errors }, register, watch } = useForm({ mode: "all" });
+
+  const submitForm = (values) => {
+    setFormValues(values)
     submitData();
     setCurrFormStep(3);
   }
@@ -14,7 +18,6 @@ function FormPersonalText() {
   return(
     <Container>
       <MainContainer>
-        
           <HeaderContent>
             <h1>Criação de usuário</h1>
             <HeaderSteps>
@@ -38,11 +41,25 @@ function FormPersonalText() {
               </ImagesContent>
             </HeaderSteps>
           </HeaderContent>
-        <FormContainer>
+        <FormContainer onSubmit={handleSubmit(submitForm)}>
           <InputContainer>
             <div>
               <label htmlFor="about">Nos conte mais sobre você</label>
-              <textarea id="about"/>
+              <textarea 
+              id="about"
+              name="about"
+              required
+              {...register("about", {
+                required: "Campo necessário",
+                minLength: {
+                  value: 50,
+                  message: 'Necessário uma descrição de pelo menos 50 caracteres' 
+                }
+              })}
+              />
+              {errors.about && (
+                <p style={{ color: "red"}}>{errors.about.message}</p>
+              )}
             </div>
           </InputContainer>
           <ButtonContainer>
@@ -53,7 +70,7 @@ function FormPersonalText() {
               Anterior
             </ButtonStyle>
             <ButtonStyle
-              onClick={ () => { submitForm() } } 
+            type="submit"
             >
               Próximo passo
             </ButtonStyle>

@@ -1,25 +1,18 @@
 import { FileText, House, UserCircle } from "phosphor-react";
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import { multiStepContext } from "../../context/StepContext";
 import { ButtonContainer, ButtonStyle, Container, FormContainer, HeaderContent, HeaderSteps, ImagesContent, InputContainer, InputContainerExtended, InputStyle, MainContainer } from './styles'
+import { useForm } from "react-hook-form";
+import InputMask from "react-input-mask";
 
 function FormAddressInfo() {
 
-  const { setCurrFormStep, userData, setUserData } = useContext(multiStepContext);
+  const { setCurrFormStep, setFormValues } = useContext(multiStepContext);
+  const { handleSubmit, formState: { errors }, register, watch } = useForm({ mode: "all" });
 
-  const cepRef = useRef();
-  const streetRef = useRef()
-  const streetNumberRef = useRef()
 
-  const dataRef = () => {
-    setUserData(
-      {
-        ...userData,
-        cep: cepRef.current.value,
-        rua: streetRef.current.value,
-        numero: streetNumberRef.current.value
-      }
-    );
+  const dataRef = (values) => {
+    setFormValues(values)
     setCurrFormStep(2);
   }
 
@@ -49,22 +42,42 @@ function FormAddressInfo() {
             </ImagesContent>
           </HeaderSteps>
         </HeaderContent>
-        <FormContainer>
+        <FormContainer onSubmit={handleSubmit(dataRef)}>
           <InputContainer>
             <div>
               <label htmlFor="cep">CEP</label>
-              <InputStyle 
+              <InputMask 
+                className="inputStyle"
+                mask="99999-999"
                 id="cep" 
-                ref={cepRef}
+                name="cep"
+                required
+                {...register("cep", {
+                  required: true,
+                  pattern: {
+                    value: /^[0-9]{5}-[0-9]{3}$/,
+                    message: "CEP inválido"
+                  }
+                })}
               />
+              {errors.cep && (
+                <p style={{ color: "red"}}>{errors.cep.message}</p>
+              )}
             </div>
             <div>
               <label htmlFor="rua">Rua</label>
               <InputStyle
               id="rua" 
               type="text"
-              ref={streetRef}
+              name="rua"
+              required
+              {...register("rua", {
+                required: "Campo necessário",
+              })}
               />
+              {errors.rua && (
+                <p style={{ color: "red"}}>{errors.rua.message}</p>
+              )}
             </div>
           </InputContainer>
 
@@ -75,8 +88,14 @@ function FormAddressInfo() {
                 id="num" 
                 name="numero"
                 type="number"
-                ref={streetNumberRef}
-              />
+                required
+                {...register("numero", {
+                  required: "Campo necessário",
+                })}
+                />
+                {errors.numero && (
+                  <p style={{ color: "red"}}>{errors.numero.message}</p>
+                )}
             </div>
             <div>
               <label htmlFor="bairro">Bairro</label>
@@ -84,7 +103,14 @@ function FormAddressInfo() {
                 id="bairro"
                 name="bairro"
                 type="text"
-              />
+                required
+                {...register("bairro", {
+                  required: "Campo necessário",
+                })}
+                />
+                {errors.bairro && (
+                  <p style={{ color: "red"}}>{errors.bairro.message}</p>
+                )}
             </div>
             <div>
               <label htmlFor="cidade">Cidade</label>
@@ -92,7 +118,14 @@ function FormAddressInfo() {
                 id="cidade" 
                 type="text"
                 name="cidade"
-              />
+                required
+                {...register("cidade", {
+                  required: "Campo necessário",
+                })}
+                />
+                {errors.cidade && (
+                  <p style={{ color: "red"}}>{errors.cidade.message}</p>
+                )}
             </div>
           </InputContainerExtended>
           <InputContainer>
@@ -112,8 +145,8 @@ function FormAddressInfo() {
               >Anterior
             </ButtonStyle>
             <ButtonStyle 
-              onClick={ () => {dataRef()} } 
-              >Próximo passo
+              type='submit'
+                >Próximo passo
             </ButtonStyle>
           </ButtonContainer>
         </FormContainer>

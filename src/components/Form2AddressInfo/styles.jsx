@@ -85,6 +85,13 @@ export const InputContainer = styled.div`
     & input[name=ponto]{
       width: 190%;
     }
+    & .inputStyle {
+      background: #F0F2F6;
+      border-radius: 4px;
+      height: 44px;
+      border: none;
+      text-align: right;
+    }
   }
 `
 

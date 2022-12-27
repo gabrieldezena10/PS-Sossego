@@ -85,6 +85,16 @@ export const InputContainer = styled.div`
     & input{
       width: 90%;
     }
+    & input[type="date"]::placeholder {
+      color: transparent;
+    }
+    & .inputStyle {
+      background: #F0F2F6;
+      border-radius: 4px;
+      height: 44px;
+      border: none;
+      text-align: right;
+    }
   }
 `
 
@@ -95,7 +105,11 @@ export const InputStyle = styled.input`
   border: none;
   text-align: right;
 `
-
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 -3rem 0 0;
+`
 export const ButtonStyle = styled.button`
   display: flex;
   width: 12rem;

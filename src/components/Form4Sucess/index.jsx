@@ -15,7 +15,7 @@ function Sucess() {
         <FormContainer>
           <ItemsContainer>
             <span>Nome</span>
-            <p>{finalData.nome}</p>
+            <p>{finalData.name}</p>
           </ItemsContainer>
           <ItemsContainer>
             <span>Email</span>
